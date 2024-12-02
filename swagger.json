@@ -1,0 +1,148 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Twitter API",
+    "description": "Twitter API Endpoints With Store in DynamoDB",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "localhost:5000",
+  "basePath": "/",
+  "tags": [],
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "scheme": "bearer",
+      "description": "Enter your bearer token in the format **Bearer &lt;token>**"
+    }
+  },
+  "paths": {
+    "/secret-api-key": {
+      "get": {
+        "tags": [
+          "Generate API Key"
+        ],
+        "description": "API Key",
+        "produces": [
+          "application/json"
+        ],
+        "summary": "Generate API key for access twitter api endpoints",
+        "responses": {}
+      }
+    },
+    "/TwitterLoginUrl": {
+      "get": {
+        "tags": [
+          "Twitter Login"
+        ],
+        "description": "Twitter User login",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "client_key",
+            "in": "header",
+            "required": true,
+            "description": "Client Key for api access authencation.",
+            "type": "string"
+          }
+        ],
+        "summary": "Twitter User login url",
+        "responses": {}
+      }
+    },
+    "/GetTwitterAccessToken?code={code}": {
+      "get": {
+        "tags": [
+          "Twitter AccessToken"
+        ],
+        "parameters": [
+          {
+            "name": "client_key",
+            "in": "header",
+            "required": true,
+            "description": "Client Key for api access authencation.",
+            "type": "string"
+          },
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "description": "Authorise code for get token details",
+            "type": "string"
+          }
+        ],
+        "summary": "Get logged in user token details",
+        "responses": {}
+      }
+    },
+    "/GetTwitterAuthUser": {
+      "get": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],        
+        "tags": [
+          "Twitter Authenticate User"
+        ],
+        "parameters": [
+          {
+            "name": "client_key",
+            "in": "header",
+            "required": true,
+            "description": "Client Key for api access authencation.",
+            "type": "string"
+          }
+        ],
+        "summary": "Get current logged in user details",
+        "responses": {}
+      }
+    },
+    "/GetReverseTimelineTweets?userId={userId}": {
+      "get": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "tags": [
+          "Twitter Timeline Tweets"
+        ],
+        "parameters": [
+          {
+            "name": "client_key",
+            "in": "header",
+            "required": true,
+            "description": "Client Key for api access authencation.",
+            "type": "string"
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "description": "UserId for get current logged in user timeline tweets",
+            "type": "string"
+          }
+        ],
+        "summary": "Get user timeline tweets",
+        "responses": {}
+      }
+    }
+  }
+}

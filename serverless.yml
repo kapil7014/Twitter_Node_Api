@@ -1,0 +1,55 @@
+service: poc-twitter
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  lambdaHashingVersion: 20201221
+  stage: dev
+  region: us-east-1
+  memorySize: 128
+
+  environment:
+    PORT: 5000
+    CallBackUrl: http://localhost:4200/auth/login
+    TwitterApiUrl: https://api.twitter.com/
+    TwitterAuthorizeUrl: https://twitter.com/i/oauth2/authorize
+    TwitterScopes: tweet.read users.read follows.read follows.write offline.access
+    ClientKeyId: 
+    ClientSecretKey: 
+    API_Key: pocTwitterDynamoDb@2022
+
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:*
+      Resource: "*"
+
+functions:
+  poc-twitter-api:
+    handler: index.handler
+    events: 
+      - http: 
+          path: /
+          method: ANY
+          cors: true
+      - http: 
+          path: /{proxy+}
+          method: ANY
+          cors: true
+
+resources:
+  Resources:
+    UsersTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: userTokens
